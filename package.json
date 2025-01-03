@@ -1,0 +1,21 @@
+{
+  "name": "carbon-discord-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.17.2",
+    "dotenv": "^16.4.7",
+    "prettier": "^3.4.2"
+  },
+  "devDependencies": {
+    "eslint": "^9.17.0"
+  },
+  "type": "module"
+}
