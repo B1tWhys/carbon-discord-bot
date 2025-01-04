@@ -12,7 +12,10 @@
   "dependencies": {
     "discord.js": "^14.17.2",
     "dotenv": "^16.4.7",
-    "prettier": "^3.4.2"
+    "expressive-code": "^0.38.3",
+    "node-html-to-image": "^5.0.0",
+    "prettier": "^3.4.2",
+    "shiki": "^1.26.1"
   },
   "devDependencies": {
     "eslint": "^9.17.0"
