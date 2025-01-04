@@ -1,3 +1,3 @@
 #!/bin/bash
 
-node ./index.js | pnpm pino-pretty
+node --watch ./index.js | pnpm pino-pretty

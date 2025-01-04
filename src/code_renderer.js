@@ -11,6 +11,18 @@ export const browser = await puppeteer.launch({
   defaultViewport: { width: 500, height: 1200, deviceScaleFactor: 2 },
 });
 
+process.on("SIGTERM", async () => {
+  console.log("SIGTERM signal received.");
+  await browser.close();
+  process.exit(0);
+});
+
+process.on("SIGINT", async () => {
+  console.log("SIGINT signal received.");
+  await browser.close();
+  process.exit(0);
+});
+
 async function helper({ page, language, code, theme }) {
   // console.log(`${language}, ${code}, ${theme}`);
   const ec = new ExpressiveCode({

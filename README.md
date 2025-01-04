@@ -1,10 +1,10 @@
 ## TODO
 ### Bot
 - [x] Fix delayed failure message that happens
-- [ ] Test/fix flow with multiple users
-- [ ] Fix weird `node --watch` deadlock
+- [x] Fix weird `node --watch` deadlock
 - [ ] Add additional customization options
 - [ ] Build 
+- [ ] Test/fix flow with multiple users
 
 ### Docs
 - [ ] Create vite app
