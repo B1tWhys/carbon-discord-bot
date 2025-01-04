@@ -5,6 +5,7 @@
 - [ ] Add additional customization options
 - [ ] Build 
 - [ ] Test/fix flow with multiple users
+- [ ] Move logging to its own file
 
 ### Docs
 - [ ] Create vite app

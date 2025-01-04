@@ -63,14 +63,16 @@ function buildConfigurationMessageComponents(
 ) {
   return [
     new ActionRowBuilder().addComponents(
-      new StringSelectMenuBuilder().setCustomId("theme").addOptions(
-        themes.slice(0, 20).map((theme) =>
-          new StringSelectMenuOptionBuilder()
-            .setLabel(theme.displayName)
-            .setValue(theme.id)
-            .setDefault(theme.id == currentThemeName),
+      new StringSelectMenuBuilder()
+        .setCustomId("theme")
+        .setPlaceholder("Change theme")
+        .addOptions(
+          themes.slice(0, 20).map((theme) =>
+            new StringSelectMenuOptionBuilder()
+              .setLabel(theme.displayName)
+              .setValue(theme.id)
+          ),
         ),
-      ),
     ),
     new ActionRowBuilder().addComponents(
       new ButtonBuilder()
@@ -122,7 +124,7 @@ export async function execute(interaction) {
       configInteraction = await configInteraction.awaitMessageComponent({
         filter,
         time: TIMEOUT,
-        dispose: true
+        dispose: true,
       });
       logger.info(
         `Got config interaction: ${configInteraction.customId} (i=${i})`,
@@ -147,7 +149,9 @@ export async function execute(interaction) {
       break;
     } else if (interactionId === "theme") {
       settingsState.theme = configInteraction.values[0];
-      logger.info(`User changed theme to: ${settingsState.theme}, deferring update`);
+      logger.info(
+        `User changed theme to: ${settingsState.theme}, deferring update`,
+      );
       await configInteraction.deferUpdate();
       logger.info(`Update deferred, rendering code`);
       image = await renderCode({
@@ -164,7 +168,7 @@ export async function execute(interaction) {
           settingsState.windowMode,
         ),
       });
-      logger.info(`Response updated, config loop complete.`)
+      logger.info(`Response updated, config loop complete.`);
     } else if (interactionId === "window-mode") {
       windowMode = configInteraction.values[0];
       logger.info(`User changed window mode to: ${windowMode}`);
