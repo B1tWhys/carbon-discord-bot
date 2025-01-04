@@ -22,7 +22,6 @@ client.commands = new Collection();
 const commands = await loadCommands();
 for (let command of commands) {
   client.commands.set(command.data.name, command);
-  // console.log(`command: ${JSON.stringify(command)}`);
 }
 
 client.on(Events.InteractionCreate, async (interaction) => {

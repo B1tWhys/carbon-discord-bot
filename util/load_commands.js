@@ -8,6 +8,11 @@ export default async function loadCommands() {
   const commandFolders = fs.readdirSync(foldersPath);
 
   for (const folder of commandFolders) {
+    // check that the folder is a directory and not a file
+    if (!fs.statSync(path.join(foldersPath, folder)).isDirectory()) {
+      continue;
+    }
+
     // Grab all the command files from the commands directory you created earlier
     const commandsPath = path.join(foldersPath, folder);
     const commandFiles = fs

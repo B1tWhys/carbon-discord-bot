@@ -2,40 +2,41 @@
 import { ExpressiveCode, ExpressiveCodeTheme } from "expressive-code";
 import { toHtml } from "expressive-code/hast";
 import nodeHtmlToImage from "node-html-to-image";
-import fs from "fs";
+import fs from "node:fs";
 import { bundledThemes, bundledThemesInfo } from "shiki/themes.mjs";
 
-const ec = new ExpressiveCode({
-  themes: [new ExpressiveCodeTheme((await bundledThemes.dracula()).default)],
-  useDarkModeMediaQuery: false,
-});
+export async function renderCode(code) {
+  const ec = new ExpressiveCode({
+    themes: [new ExpressiveCodeTheme((await bundledThemes.dracula()).default)],
+    useDarkModeMediaQuery: false,
+  });
 
-// Get base styles that should be included on the page
-// (they are independent of the rendered code blocks)
-const baseStyles = await ec.getBaseStyles();
-const themeStyles = await ec.getThemeStyles();
-const jsModules = await ec.getJsModules();
+  // Get base styles that should be included on the page
+  // (they are independent of the rendered code blocks)
+  const baseStyles = await ec.getBaseStyles();
+  const themeStyles = await ec.getThemeStyles();
+  const jsModules = await ec.getJsModules();
 
-// Render some example code to AST
-const { renderedGroupAst, styles: blockStyles } = await ec.render({
-  code: 'console.log("Hello world!")',
-  language: "js",
-  meta: "",
-});
+  // Render some example code to AST
+  const { renderedGroupAst, styles: blockStyles } = await ec.render({
+    code: 'console.log("Hello world!")',
+    language: "js",
+    meta: "",
+  });
 
-// Convert the rendered AST to HTML
-let htmlContent = toHtml(renderedGroupAst);
+  // Convert the rendered AST to HTML
+  let htmlContent = toHtml(renderedGroupAst);
 
-// Collect styles and add them before the HTML content
-const stylesToPrepend = [];
-stylesToPrepend.push(baseStyles);
-stylesToPrepend.push(themeStyles);
-stylesToPrepend.push(...blockStyles);
+  // Collect styles and add them before the HTML content
+  const stylesToPrepend = [];
+  stylesToPrepend.push(baseStyles);
+  stylesToPrepend.push(themeStyles);
+  stylesToPrepend.push(...blockStyles);
 
-const styleContent = `<style> ${[...stylesToPrepend].join("")} </style>`;
-const jsContent = `<script type="module"> ${[...jsModules].join("")} </script>`;
+  const styleContent = `<style> ${[...stylesToPrepend].join("")} </style>`;
+  const jsContent = `<script type="module"> ${[...jsModules].join("")} </script>`;
 
-const htmlDocument = `
+  const htmlDocument = `
 <!doctype html>
 <html lang="en">
 <head>
@@ -47,22 +48,38 @@ const htmlDocument = `
     ${styleContent}
 
     ${jsContent}
+
 </head>
 <body>
     ${htmlContent}
 </body>
 </html>
 `;
-// Output HTML to the console
-console.log(htmlDocument);
+  /*
+    <style>
+    body {
+    width: 400px;
+    }
+    </style>
+    */
 
-// Run `node generate-html.mjs` to generate the HTML file
-// and open it in the browser
-// fs.writeFileSync("index.html", htmlDocument);
+  // Output HTML to the console
+  // console.log(htmlDocument);
 
-await nodeHtmlToImage({
-  output: "test_code.png",
-  html: htmlDocument,
-});
+  // Run `node generate-html.mjs` to generate the HTML file
+  // and open it in the browser
+  // fs.writeFileSync("test.html", htmlDocument);
 
-console.log("Great success!");
+  const image = await nodeHtmlToImage({
+    html: htmlDocument,
+    puppeteerArgs: {
+      defaultViewport: {
+        width: 500,
+        height: 1200,
+        deviceScaleFactor: 3,
+      },
+    },
+  });
+
+  return image;
+}
