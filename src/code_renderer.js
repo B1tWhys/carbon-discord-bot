@@ -1,12 +1,16 @@
 // File: generate-html.mjs
 import { ExpressiveCode, ExpressiveCodeTheme } from "expressive-code";
 import { toHtml } from "expressive-code/hast";
-import nodeHtmlToImage from "node-html-to-image";
 import { bundledThemes, bundledThemesInfo } from "shiki/themes.mjs";
+import puppeteer from "puppeteer";
 
 export const themes = bundledThemesInfo;
 
+export const browser = await puppeteer.launch({ headless: false });
+
 export async function renderCode({ language, code, theme }) {
+  console.log(`${language}, ${code}, ${theme}`);
+  const page = await browser.newPage();
   const ec = new ExpressiveCode({
     themes: [new ExpressiveCodeTheme((await bundledThemes[theme]()).default)],
     useDarkModeMediaQuery: false,
@@ -22,7 +26,7 @@ export async function renderCode({ language, code, theme }) {
   // Render some example code to AST
   const { renderedGroupAst, styles: blockStyles } = await ec.render({
     code: code,
-    // language: language,
+    language: language,
     wrap: true,
   });
 
@@ -63,16 +67,13 @@ export async function renderCode({ language, code, theme }) {
 </html>
 `;
 
-  const image = await nodeHtmlToImage({
-    html: htmlDocument,
-    puppeteerArgs: {
-      defaultViewport: {
-        width: 500,
-        height: 1200,
-        deviceScaleFactor: 2,
-      },
-    },
+  await page.setContent(htmlDocument);
+  const image = await page.screenshot({
+    fullPage: true,
+    type: "jpeg",
+    quality: 100,
   });
+  page.close();
 
   return image;
 }
