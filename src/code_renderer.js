@@ -7,6 +7,9 @@ import puppeteer from "puppeteer";
 export const themes = bundledThemesInfo;
 
 export const browser = await puppeteer.launch({ headless: false });
+process.on("exit", async () => {
+  await browser.close();
+});
 
 export async function renderCode({ language, code, theme }) {
   console.log(`${language}, ${code}, ${theme}`);
@@ -68,11 +71,12 @@ export async function renderCode({ language, code, theme }) {
 `;
 
   await page.setContent(htmlDocument);
-  const image = await page.screenshot({
-    fullPage: true,
-    type: "jpeg",
-    quality: 100,
-  });
+  const image = Buffer.from(
+    await page.screenshot({
+      fullPage: true,
+      type: "png",
+    }),
+  );
   page.close();
 
   return image;

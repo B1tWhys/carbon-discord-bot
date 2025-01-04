@@ -61,7 +61,7 @@ function buildConfigurationMessageComponents({
     new ActionRowBuilder().addComponents(
       new StringSelectMenuBuilder()
         .setCustomId("theme")
-        .setLabel("Theme")
+        // .setLabel("Theme")
         .addOptions(
           themes.slice(0, 20).map((theme) =>
             new StringSelectMenuOptionBuilder()
@@ -104,8 +104,8 @@ export async function execute(interaction) {
   let configInteraction = await modalResponse.editReply({
     files: [image],
     components: buildConfigurationMessageComponents({
-      currentThemeName: theme,
-      currentWindowMode: windowMode,
+      currentThemeName: settingsState.theme,
+      currentWindowMode: settingsState.windowMode,
     }),
     flags: MessageFlags.Ephemeral,
   });
@@ -127,21 +127,21 @@ export async function execute(interaction) {
       });
       break;
     } else if (interactionId === "theme") {
-      theme = configInteraction.values[0];
-      console.log(`User changed theme to: ${theme}`);
-      image = await renderCode(lang, codeSnippet, theme);
+      settingsState.theme = configInteraction.values[0];
+      console.log(`User changed theme to: ${settingsState.theme}`);
+      image = await renderCode(lang, codeSnippet, settingsState.theme);
       configInteraction = await configInteraction.update({
         files: [image],
-        components: buildConfigurationMessageComponents(theme),
+        components: buildConfigurationMessageComponents(settingsState.theme),
       });
     } else if (interactionId === "window-mode") {
-      windowMode = configInteraction.values[0];
-      console.log(`User changed window mode to: ${windowMode}`);
-      image = await renderCode(lang, codeSnippet, theme);
-      configInteraction = await configInteraction.update({
-        files: [image],
-        components: buildConfigurationMessageComponents(theme),
-      });
+      // windowMode = configInteraction.values[0];
+      // console.log(`User changed window mode to: ${windowMode}`);
+      // image = await renderCode(lang, codeSnippet, theme);
+      // configInteraction = await configInteraction.update({
+      //   files: [image],
+      //   components: buildConfigurationMessageComponents(theme),
+      // });
     }
   }
 }

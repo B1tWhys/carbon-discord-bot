@@ -1,6 +1,6 @@
 // Require the necessary discord.js classes
 import { config } from "dotenv";
-import { Client, Events, GatewayIntentBits } from "discord.js";
+import { Client, Events, GatewayIntentBits, MessageFlags } from "discord.js";
 import { execute as handler } from "./src/discord_interaction_handler.js";
 
 const token = config().parsed.TOKEN;
