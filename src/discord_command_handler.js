@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import { renderCode } from "../render_code.js";
+import { renderCode } from "./code_renderer.js";
 
 export const data = new SlashCommandBuilder()
   .setName("carbon")

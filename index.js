@@ -1,7 +1,7 @@
 // Require the necessary discord.js classes
 import { config } from "dotenv";
 import { Client, Collection, Events, GatewayIntentBits } from "discord.js";
-import loadCommands from "./util/load_commands.js";
+import { execute as handler } from "./src/discord_command_handler.js";
 
 const token = config().parsed.TOKEN;
 
@@ -18,26 +18,23 @@ client.once(Events.ClientReady, (readyClient) => {
 // Log in to Discord with your client's token
 client.login(token);
 
-client.commands = new Collection();
-const commands = await loadCommands();
-for (let command of commands) {
-  client.commands.set(command.data.name, command);
-}
+// client.commands = new Collection();
+// client.commands.set("carbon", execute);
 
 client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
-  const commandName = interaction.commandName;
-  console.debug(`Received interaction with name: ${commandName}`);
-  const command = interaction.client.commands.get(interaction.commandName);
+  // const commandName = interaction.commandName;
+  // console.debug(`Received interaction with name: ${commandName}`);
+  // const command = interaction.client.commands.get(interaction.commandName);
 
-  if (!command) {
-    console.error(`No command matching ${interaction.commandName} was found.`);
-    return;
-  }
+  // if (!command) {
+  //   console.error(`No command matching ${interaction.commandName} was found.`);
+  //   return;
+  // }
 
   try {
-    await command.execute(interaction);
+    await handler(interaction);
   } catch (error) {
     console.error(error);
     if (interaction.replied || interaction.deferred) {

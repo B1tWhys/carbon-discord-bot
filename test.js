@@ -1,4 +1,4 @@
-import { renderCode } from "./commands/render_code.js";
+import { renderCode } from "./src/code_renderer.js";
 import fs from "node:fs";
 
 const code = 'console.log("Hello world!")';
