@@ -2,13 +2,15 @@
 import { ExpressiveCode, ExpressiveCodeTheme } from "expressive-code";
 import { toHtml } from "expressive-code/hast";
 import nodeHtmlToImage from "node-html-to-image";
-import fs from "node:fs";
 import { bundledThemes, bundledThemesInfo } from "shiki/themes.mjs";
 
-export async function renderCode(code) {
+export const themes = bundledThemesInfo;
+
+export async function renderCode(language, code, theme) {
   const ec = new ExpressiveCode({
-    themes: [new ExpressiveCodeTheme((await bundledThemes.dracula()).default)],
+    themes: [new ExpressiveCodeTheme((await bundledThemes[theme]()).default)],
     useDarkModeMediaQuery: false,
+    wrap: true,
   });
 
   // Get base styles that should be included on the page
@@ -19,9 +21,9 @@ export async function renderCode(code) {
 
   // Render some example code to AST
   const { renderedGroupAst, styles: blockStyles } = await ec.render({
-    code: 'console.log("Hello world!")',
-    language: "js",
-    meta: "",
+    code: code,
+    language: language,
+    wrap: true,
   });
 
   // Convert the rendered AST to HTML
@@ -46,6 +48,11 @@ export async function renderCode(code) {
     <title>Document</title>
 
     ${styleContent}
+    <style>
+      body {
+        max-width: 500px;
+      }
+    </style>
 
     ${jsContent}
 
@@ -62,7 +69,7 @@ export async function renderCode(code) {
       defaultViewport: {
         width: 500,
         height: 1200,
-        deviceScaleFactor: 3,
+        deviceScaleFactor: 2,
       },
     },
   });
