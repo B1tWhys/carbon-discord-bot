@@ -6,7 +6,7 @@ import { bundledThemes, bundledThemesInfo } from "shiki/themes.mjs";
 
 export const themes = bundledThemesInfo;
 
-export async function renderCode(language, code, theme) {
+export async function renderCode({ language, code, theme }) {
   const ec = new ExpressiveCode({
     themes: [new ExpressiveCodeTheme((await bundledThemes[theme]()).default)],
     useDarkModeMediaQuery: false,
@@ -22,7 +22,7 @@ export async function renderCode(language, code, theme) {
   // Render some example code to AST
   const { renderedGroupAst, styles: blockStyles } = await ec.render({
     code: code,
-    language: language,
+    // language: language,
     wrap: true,
   });
 

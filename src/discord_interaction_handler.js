@@ -10,6 +10,7 @@ import {
   MessageFlags,
 } from "discord.js";
 import { renderCode, themes } from "./code_renderer.js";
+import { bundledLanguages } from "shiki";
 
 export const data = new SlashCommandBuilder()
   .setName("carbon")
@@ -86,14 +87,19 @@ function buildConfigurationMessageComponents({
 export async function execute(interaction) {
   if (!interaction.isChatInputCommand()) return;
 
-  let theme = "dracula";
-  let windowMode = "terminal";
-  const lang = interaction.options.getString("language");
+  let settingsState = {
+    theme: "dracula",
+    windowMode: "terminal",
+    language: interaction.options.getString("language"),
+  };
 
   let [modalResponse, codeSnippet] = await getCodeSnippetViaModel(interaction);
   await modalResponse.deferReply({ flags: MessageFlags.Ephemeral });
-
-  let image = await renderCode(lang, codeSnippet, theme);
+  let image = await renderCode({
+    language: settingsState.language,
+    code: codeSnippet,
+    theme: settingsState.theme,
+  });
 
   let configInteraction = await modalResponse.editReply({
     files: [image],
@@ -129,6 +135,13 @@ export async function execute(interaction) {
         components: buildConfigurationMessageComponents(theme),
       });
     } else if (interactionId === "window-mode") {
+      windowMode = configInteraction.values[0];
+      console.log(`User changed window mode to: ${windowMode}`);
+      image = await renderCode(lang, codeSnippet, theme);
+      configInteraction = await configInteraction.update({
+        files: [image],
+        components: buildConfigurationMessageComponents(theme),
+      });
     }
   }
 }
