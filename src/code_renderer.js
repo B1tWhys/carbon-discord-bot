@@ -6,14 +6,13 @@ import puppeteer from "puppeteer";
 
 export const themes = bundledThemesInfo;
 
-export const browser = await puppeteer.launch({ headless: false });
-process.on("exit", async () => {
-  await browser.close();
+export const browser = await puppeteer.launch({
+  headless: true,
+  defaultViewport: { width: 500, height: 1200, deviceScaleFactor: 2 },
 });
 
-export async function renderCode({ language, code, theme }) {
-  console.log(`${language}, ${code}, ${theme}`);
-  const page = await browser.newPage();
+async function helper({ page, language, code, theme }) {
+  // console.log(`${language}, ${code}, ${theme}`);
   const ec = new ExpressiveCode({
     themes: [new ExpressiveCodeTheme((await bundledThemes[theme]()).default)],
     useDarkModeMediaQuery: false,
@@ -71,13 +70,23 @@ export async function renderCode({ language, code, theme }) {
 `;
 
   await page.setContent(htmlDocument);
+  const element = await page.waitForSelector("body");
   const image = Buffer.from(
-    await page.screenshot({
-      fullPage: true,
+    await element.screenshot({
       type: "png",
     }),
   );
-  page.close();
 
   return image;
+}
+
+export async function renderCode(args) {
+  let context, page;
+  try {
+    context = await browser.createBrowserContext();
+    page = await context.newPage();
+    return await helper({ page, ...args });
+  } finally {
+    await context.close();
+  }
 }

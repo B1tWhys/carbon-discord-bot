@@ -10,7 +10,11 @@ import {
   MessageFlags,
 } from "discord.js";
 import { renderCode, themes } from "./code_renderer.js";
-import { bundledLanguages } from "shiki";
+import loggerBuilder from "pino";
+
+const logger = loggerBuilder();
+
+const TIMEOUT = 60000;
 
 export const data = new SlashCommandBuilder()
   .setName("carbon")
@@ -36,40 +40,37 @@ async function getCodeSnippetViaModel(interaction) {
       ),
     );
 
-  console.log("Displaying the modal");
+  logger.info("Displaying the modal");
   await interaction.showModal(modal);
 
   const collectorFilter = (i) =>
     i.isModalSubmit() &&
     i.user.id === interaction.user.id &&
     i.customId === "code-snippet";
-  console.log("Waiting for modal submit");
+  logger.info("Waiting for modal submit");
   const confirmation = await interaction.awaitModalSubmit({
     filter: collectorFilter,
-    time: 60000,
+    time: TIMEOUT,
   });
 
   const codeSnippet = confirmation.fields.getTextInputValue("code");
   return [confirmation, codeSnippet];
 }
 
-function buildConfigurationMessageComponents({
+function buildConfigurationMessageComponents(
   currentThemeName,
   currentWindowMode,
-}) {
+) {
   return [
     new ActionRowBuilder().addComponents(
-      new StringSelectMenuBuilder()
-        .setCustomId("theme")
-        // .setLabel("Theme")
-        .addOptions(
-          themes.slice(0, 20).map((theme) =>
-            new StringSelectMenuOptionBuilder()
-              .setLabel(theme.displayName)
-              .setValue(theme.id)
-              .setDefault(theme.id == currentThemeName),
-          ),
+      new StringSelectMenuBuilder().setCustomId("theme").addOptions(
+        themes.slice(0, 20).map((theme) =>
+          new StringSelectMenuOptionBuilder()
+            .setLabel(theme.displayName)
+            .setValue(theme.id)
+            .setDefault(theme.id == currentThemeName),
         ),
+      ),
     ),
     new ActionRowBuilder().addComponents(
       new ButtonBuilder()
@@ -94,6 +95,7 @@ export async function execute(interaction) {
   };
 
   let [modalResponse, codeSnippet] = await getCodeSnippetViaModel(interaction);
+  logger.info("Modal completed, code snippet retrieved");
   await modalResponse.deferReply({ flags: MessageFlags.Ephemeral });
   let image = await renderCode({
     language: settingsState.language,
@@ -101,21 +103,37 @@ export async function execute(interaction) {
     theme: settingsState.theme,
   });
 
+  logger.info("Image rendered, editing modal response");
   let configInteraction = await modalResponse.editReply({
     files: [image],
-    components: buildConfigurationMessageComponents({
-      currentThemeName: settingsState.theme,
-      currentWindowMode: settingsState.windowMode,
-    }),
+    components: buildConfigurationMessageComponents(
+      settingsState.theme,
+      settingsState.windowMode,
+    ),
     flags: MessageFlags.Ephemeral,
   });
+  logger.info("Modal editReply completed. Entering loop...");
 
-  const filter = (i) => i.user.id === interaction.user.id;
+  const filter = (i) => i.user.id === interaction.user.id; // &&
+  let i = 0;
   while (true) {
-    configInteraction = await configInteraction.awaitMessageComponent({
-      filter,
-      time: 60000,
-    });
+    try {
+      logger.info(`Beginning wait for config interaction. (i=${i})`);
+      configInteraction = await configInteraction.awaitMessageComponent({
+        filter,
+        time: TIMEOUT,
+        dispose: true
+      });
+      logger.info(
+        `Got config interaction: ${configInteraction.customId} (i=${i})`,
+      );
+      i += 1;
+    } catch (error) {
+      logger.info(
+        `Config interaction timed out. Breaking out of loop... (i=${i})`,
+      );
+      break;
+    }
 
     const interactionId = configInteraction.customId;
     if (interactionId === "cancel") {
@@ -123,25 +141,33 @@ export async function execute(interaction) {
       break;
     } else if (interactionId === "confirm") {
       await configInteraction.reply({
-        files: [image],
+        files: [await image],
       });
+      await modalResponse.deleteReply();
       break;
     } else if (interactionId === "theme") {
       settingsState.theme = configInteraction.values[0];
-      console.log(`User changed theme to: ${settingsState.theme}`);
-      image = await renderCode(lang, codeSnippet, settingsState.theme);
-      configInteraction = await configInteraction.update({
-        files: [image],
-        components: buildConfigurationMessageComponents(settingsState.theme),
+      logger.info(`User changed theme to: ${settingsState.theme}, deferring update`);
+      await configInteraction.deferUpdate();
+      logger.info(`Update deferred, rendering code`);
+      image = await renderCode({
+        language: settingsState.language,
+        code: codeSnippet,
+        theme: settingsState.theme,
       });
+      logger.info(`Code rendered, updating modalResponse`);
+
+      configInteraction = await modalResponse.editReply({
+        files: [image],
+        components: buildConfigurationMessageComponents(
+          settingsState.theme,
+          settingsState.windowMode,
+        ),
+      });
+      logger.info(`Response updated, config loop complete.`)
     } else if (interactionId === "window-mode") {
-      // windowMode = configInteraction.values[0];
-      // console.log(`User changed window mode to: ${windowMode}`);
-      // image = await renderCode(lang, codeSnippet, theme);
-      // configInteraction = await configInteraction.update({
-      //   files: [image],
-      //   components: buildConfigurationMessageComponents(theme),
-      // });
+      windowMode = configInteraction.values[0];
+      logger.info(`User changed window mode to: ${windowMode}`);
     }
   }
 }
