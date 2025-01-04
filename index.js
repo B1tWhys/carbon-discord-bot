@@ -1,7 +1,7 @@
 // Require the necessary discord.js classes
 import { config } from "dotenv";
 import { Client, Collection, Events, GatewayIntentBits } from "discord.js";
-import { execute as handler } from "./src/discord_command_handler.js";
+import { execute as handler } from "./src/discord_interaction_handler.js";
 
 const token = config().parsed.TOKEN;
 
@@ -22,7 +22,7 @@ client.login(token);
 // client.commands.set("carbon", execute);
 
 client.on(Events.InteractionCreate, async (interaction) => {
-  if (!interaction.isChatInputCommand()) return;
+  // if (!interaction.isChatInputCommand()) return;
 
   // const commandName = interaction.commandName;
   // console.debug(`Received interaction with name: ${commandName}`);

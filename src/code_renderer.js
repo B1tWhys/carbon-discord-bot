@@ -55,20 +55,6 @@ export async function renderCode(code) {
 </body>
 </html>
 `;
-  /*
-    <style>
-    body {
-    width: 400px;
-    }
-    </style>
-    */
-
-  // Output HTML to the console
-  // console.log(htmlDocument);
-
-  // Run `node generate-html.mjs` to generate the HTML file
-  // and open it in the browser
-  // fs.writeFileSync("test.html", htmlDocument);
 
   const image = await nodeHtmlToImage({
     html: htmlDocument,

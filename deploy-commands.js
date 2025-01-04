@@ -1,6 +1,6 @@
 import { REST, Routes } from "discord.js";
 import { config } from "dotenv";
-import { data } from "./src/discord_command_handler.js";
+import { data } from "./src/discord_interaction_handler.js";
 
 // const { clientId, guildId, token } = config().parsed;
 const clientId = config().parsed.CLIENT_ID;
@@ -14,14 +14,11 @@ const rest = new REST().setToken(token);
 (async () => {
   try {
     // The put method is used to fully refresh all commands in the guild with the current set
-    await rest.put(
-      Routes.applicationGuildCommands(clientId, guildId),
-      { body: [data.toJSON()] },
-    );
+    await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+      body: [data.toJSON()],
+    });
 
-    console.log(
-      `Successfully redeployed command definition to discord`,
-    );
+    console.log(`Successfully redeployed command definition to discord`);
   } catch (error) {
     // And of course, make sure you catch and log any errors!
     console.error(error);
