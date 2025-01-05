@@ -8,7 +8,7 @@ export const themes = bundledThemesInfo;
 
 export const browser = await puppeteer.launch({
   headless: true,
-  defaultViewport: { width: 500, height: 1200, deviceScaleFactor: 2 },
+  defaultViewport: { width: 1000, height: 1200, deviceScaleFactor: 2 },
 });
 
 process.on("SIGTERM", async () => {
@@ -23,8 +23,15 @@ process.on("SIGINT", async () => {
   process.exit(0);
 });
 
-async function helper({ page, language, code, theme }) {
-  // console.log(`${language}, ${code}, ${theme}`);
+async function helper({
+  page,
+  language,
+  code,
+  theme,
+  windowMode,
+  title,
+  margin,
+}) {
   const ec = new ExpressiveCode({
     themes: [new ExpressiveCodeTheme((await bundledThemes[theme]()).default)],
     useDarkModeMediaQuery: false,
@@ -41,7 +48,11 @@ async function helper({ page, language, code, theme }) {
   const { renderedGroupAst, styles: blockStyles } = await ec.render({
     code: code,
     language: language,
-    wrap: true,
+    props: {
+      wrap: true,
+      frame: windowMode,
+      title: title,
+    },
   });
 
   // Convert the rendered AST to HTML
@@ -68,7 +79,10 @@ async function helper({ page, language, code, theme }) {
     ${styleContent}
     <style>
       body {
-        max-width: 500px;
+        max-width: 1000px;
+        width: fit-content;
+        padding: ${margin};
+        background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 55%, rgba(0,212,255,1) 100%); 
       }
     </style>
 
@@ -99,6 +113,8 @@ export async function renderCode(args) {
     page = await context.newPage();
     return await helper({ page, ...args });
   } finally {
-    await context.close();
+    if (context !== undefined) {
+      await context.close();
+    }
   }
 }

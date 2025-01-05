@@ -6,6 +6,8 @@
 - [ ] Build 
 - [ ] Test/fix flow with multiple users
 - [ ] Move logging to its own file
+- [ ] Improve UX on interaction timeout
+- [ ] Fix text wrapping 
 
 ### Docs
 - [ ] Create vite app
