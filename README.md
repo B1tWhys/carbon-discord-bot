@@ -12,19 +12,20 @@
 - [x] Add additional customization options
 - [x] Test/fix flow with multiple users
 - [x] Move logging to its own file
-- [ ] Improve UX on interaction timeout
 - [x] Fix text wrapping
 - [x] Set avatar
-- [ ] Maybe change deleting the original message to making it non-ephemeral
 - [x] Get rid of clipboard icon
+- [ ] Maybe change deleting the original message to making it non-ephemeral
+- [ ] Improve UX on interaction timeout
 
 ### Docs
 
-- [ ] Create vite app
-- [ ] Setup tailwind
+- [x] Create vite app
+- [x] Setup tailwind
 - [ ] Host (vercel)
 - [ ] Write content
 - [ ] Add basic styling
 - [ ] Add screenshots/gif
 - [ ] Make README presentable
+- [ ] Setup google indexing
 
