@@ -37,25 +37,25 @@ jobs:
         run: |
           docker build -t $ECR_REPO:$TAG .
           docker push $ECR_REPO:$TAG
-  # bump_tag:
-  #   name: Bump FE kustomization tags
-  #   runs-on: ubuntu-latest
-  #   needs: build
-  #   permissions:
-  #     contents: write
-  #   concurrency:
-  #     group: bump-tag
-  #   steps:
-  #     - name: Check out code
-  #       uses: actions/checkout@v2
-  #     - name: Update BE k8s tag
-  #       run: |
-  #         cd infra/overlays/prod
-  #         TAG="${{ needs.build.outputs.imgTag }}"
-  #         git pull
-  #         kustomize edit set image "spt-frontend-image=$ECR_REPO:$TAG"
-  #         git config --global user.name 'Github actions'
-  #         git config --global user.email 'githubaction@spotpricetracker.com'
-  #         git add ./kustomization.yaml
-  #         git commit -m "Release FE version $TAG"
-  #         git push
+  bump_tag:
+    name: Bump kustomization tags
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: write
+    concurrency:
+      group: bump-tag
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Update k8s tag
+        run: |
+          cd k8s
+          TAG="${{ needs.build.outputs.imgTag }}"
+          git pull
+          kustomize edit set image "spt-frontend-image=$ECR_REPO:$TAG"
+          git config --global user.name 'Github actions'
+          git config --global user.email 'githubaction@carbon-discord.com'
+          git add ./kustomization.yaml
+          git commit -m "Release FE version $TAG"
+          git push
