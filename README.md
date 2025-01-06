@@ -19,9 +19,9 @@
 - [ ] Setup bot hosting
     - [x] Dockerfile
     - [x] Github actions
-    - [ ] Deployment
+    - [x] Deployment
     - [ ] Secrets
-    - [ ] Argo project
+    - [x] Argo project
 
 ### Docs
 
