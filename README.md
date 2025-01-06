@@ -32,7 +32,7 @@
 - [x] Write content
 - [x] Add basic styling
 - [x] Add screenshots/gif
-- [ ] Setup DNS
+- [x] Setup DNS
 - [ ] Make README presentable
 - [ ] Setup google indexing
 - [ ] Figure out why the video looks so bad in the browser
