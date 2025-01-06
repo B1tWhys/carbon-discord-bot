@@ -8,4 +8,4 @@ resources:
 images:
 - name: spt-frontend-image
   newName: public.ecr.aws/b9e2c7d9/carbon-discord
-  newTag: e5a9a3c
+  newTag: 1aaa775
