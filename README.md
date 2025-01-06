@@ -16,6 +16,13 @@
 - [x] Get rid of clipboard icon
 - [ ] Maybe change deleting the original message to making it non-ephemeral
 - [ ] Improve UX on interaction timeout
+- [ ] Setup bot hosting
+    - [ ] Dockerfile
+    - [ ] Github actions
+    - [ ] Secrets
+    - [ ] Deployment
+    - [ ] Ingress
+    - [ ] Argo project
 
 ### Docs
 
@@ -25,6 +32,7 @@
 - [x] Write content
 - [x] Add basic styling
 - [x] Add screenshots/gif
+- [ ] Setup DNS
 - [ ] Make README presentable
 - [ ] Setup google indexing
 - [ ] Figure out why the video looks so bad in the browser
