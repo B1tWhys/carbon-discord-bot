@@ -22,5 +22,8 @@
   "devDependencies": {
     "eslint": "^9.17.0"
   },
-  "type": "module"
+  "type": "module",
+  "prettier": {
+    "bracketSameLine": true
+  }
 }

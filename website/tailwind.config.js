@@ -2,7 +2,11 @@
 export default {
   content: ["./src/**/*.{js,ts,jsx,tsx,html}"],
   theme: {
-    extend: {},
+    extend: {
+      aspectRatio: {
+        video: "2092/1440",
+      },
+    },
   },
   plugins: [],
 };
