@@ -3,13 +3,14 @@ import { ExpressiveCode, ExpressiveCodeTheme } from "expressive-code";
 import { toHtml } from "expressive-code/hast";
 import { bundledThemes, bundledThemesInfo } from "shiki/themes.mjs";
 import puppeteer from "puppeteer";
-import { logger } from "./logging";
+import { logger } from "./logging.js";
 
 export const themes = bundledThemesInfo;
 
 export const browser = await puppeteer.launch({
   headless: true,
   defaultViewport: { width: 1000, height: 1200, deviceScaleFactor: 2 },
+  args: ["--no-sandbox", "--disable-setuid-sandbox"],
 });
 
 process.on("SIGTERM", async () => {
