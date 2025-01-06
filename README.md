@@ -4,7 +4,6 @@
 
 ## TODO
 
-
 ### Bot
 
 - [x] Fix delayed failure message that happens
@@ -22,10 +21,10 @@
 
 - [x] Create vite app
 - [x] Setup tailwind
-- [ ] Host (vercel)
-- [ ] Write content
-- [ ] Add basic styling
-- [ ] Add screenshots/gif
+- [x] Host (vercel)
+- [x] Write content
+- [x] Add basic styling
+- [x] Add screenshots/gif
 - [ ] Make README presentable
 - [ ] Setup google indexing
-
+- [ ] Figure out why the video looks so bad in the browser
