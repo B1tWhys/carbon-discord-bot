@@ -3,6 +3,7 @@ import { ExpressiveCode, ExpressiveCodeTheme } from "expressive-code";
 import { toHtml } from "expressive-code/hast";
 import { bundledThemes, bundledThemesInfo } from "shiki/themes.mjs";
 import puppeteer from "puppeteer";
+import { logger } from "./logging";
 
 export const themes = bundledThemesInfo;
 
@@ -12,13 +13,13 @@ export const browser = await puppeteer.launch({
 });
 
 process.on("SIGTERM", async () => {
-  console.log("SIGTERM signal received.");
+  logger.info("SIGTERM signal received.");
   await browser.close();
   process.exit(0);
 });
 
 process.on("SIGINT", async () => {
-  console.log("SIGINT signal received.");
+  logger.info("SIGINT signal received.");
   await browser.close();
   process.exit(0);
 });
