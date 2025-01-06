@@ -4,3 +4,4 @@ namespace: carbon-bot
 resources:
   - deployment.yaml
   - namespace.yaml
+  - secret.yaml
