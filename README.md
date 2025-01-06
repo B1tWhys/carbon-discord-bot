@@ -7,6 +7,9 @@
 - [x] Move logging to its own file
 - [ ] Improve UX on interaction timeout
 - [x] Fix text wrapping 
+- [x] Set avatar
+- [ ] Maybe change deleting the original message to making it non-ephemeral
+- [x] Get rid of clipboard icon
 
 ### Docs
 - [ ] Create vite app

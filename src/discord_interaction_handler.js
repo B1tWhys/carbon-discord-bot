@@ -131,6 +131,7 @@ export async function execute(interaction) {
     await getCodeSnippetViaModel(interaction);
   if (title.length > 0) {
     settingsState.windowMode = "terminal";
+    settingsState.title = title;
   }
   logger.info("Modal completed, code snippet retrieved");
   await modalResponse.deferReply({ flags: MessageFlags.Ephemeral });

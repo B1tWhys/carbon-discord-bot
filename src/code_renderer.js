@@ -32,10 +32,13 @@ async function helper({
   title,
   margin,
 }) {
+  console.log(`Title: ${title}`);
   const ec = new ExpressiveCode({
     themes: [new ExpressiveCodeTheme((await bundledThemes[theme]()).default)],
     useDarkModeMediaQuery: false,
-    wrap: true,
+    frames: {
+      showCopyToClipboardButton: false,
+    },
   });
 
   // Get base styles that should be included on the page
@@ -52,6 +55,7 @@ async function helper({
       wrap: true,
       frame: windowMode,
       title: title,
+      showCopyToClipboardButton: false,
     },
   });
 
