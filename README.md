@@ -33,6 +33,7 @@
 - [x] Add basic styling
 - [x] Add screenshots/gif
 - [x] Setup DNS
+- [ ] Add discord install link
 - [ ] Make README presentable
 - [ ] Setup google indexing
 - [ ] Figure out why the video looks so bad in the browser
