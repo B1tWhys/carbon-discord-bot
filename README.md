@@ -18,10 +18,9 @@
 - [ ] Improve UX on interaction timeout
 - [ ] Setup bot hosting
     - [x] Dockerfile
-    - [ ] Github actions
-    - [ ] Secrets
+    - [x] Github actions
     - [ ] Deployment
-    - [ ] Ingress
+    - [ ] Secrets
     - [ ] Argo project
 
 ### Docs

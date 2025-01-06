@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: carbon-bot-deployment
+  namespace: carbon-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: carbon-bot
+  template:
+    metadata:
+      labels:
+        app: carbon-bot
+    spec:
+      containers:
+        - name: carbon-bot
+          image: public.ecr.aws/b9e2c7d9/carbon-discord:f956878
+          resources:
+            limits:
+              memory: "500Mi"
+              cpu: "1"
+            requests:
+              memory: "500Mi"
+              cpu: "500m"  # Requests half a core
+          ports:
+            - containerPort: 80
