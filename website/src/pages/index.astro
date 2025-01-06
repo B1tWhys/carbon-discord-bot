@@ -1,0 +1,46 @@
+---
+import Footer from "../components/Footer.astro";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <div class="min-h-screen text-stone-300 flex flex-col justify-between">
+    <div class="w-full flex flex-col justify-center items-center gap-3">
+      <h1 class="text-4xl font-bold">Carbon</h1>
+      <p>Share beautiful code snippets on Discord</p>
+      <video
+        class="shadow-md rounded-lg shadow-zinc-800 aspect-video bg-black w-full sm:w-4/5 xl:w-1/2"
+        autoplay
+        muted
+        loop
+        src="https://utfs.io/f/HviiVHfK972yMNOa7EcZcSIwzxWa6lLy90fgOQpTstUGKj1P"
+      ></video>
+      <div class="py-2 flex gap-4 text-lg">
+        <a
+          class="bg-purple-700 border-purple-600 border-2 rounded-md py-1 px-2 shadow-md font-semibold"
+          href="#">
+          Install Carbon
+        </a>
+        <a
+          class="bg-slate-300 border-2 rounded-md py-1 px-2 shadow-md text-slate-800"
+          href="https://github.com/B1tWhys/carbon-discord-bot"
+          target="_blank">
+          Star on github
+        </a>
+      </div>
+    </div>
+    <Footer />
+  </div>
+</Layout>
+
+<style>
+  body {
+    background: rgb(63, 94, 251);
+    background: radial-gradient(
+      circle,
+      rgb(11, 30, 128) 20%,
+      rgb(166, 70, 252) 151%
+    );
+    background-attachment: fixed;
+  }
+</style>

@@ -1,9 +1,0 @@
-body {
-  background: rgb(63, 94, 251);
-  background: radial-gradient(
-    circle,
-    rgb(11, 30, 128) 20%,
-    rgb(166, 70, 252) 151%
-  );
-  background-attachment: fixed;
-}
