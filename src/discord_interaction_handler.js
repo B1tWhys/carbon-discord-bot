@@ -10,9 +10,7 @@ import {
   MessageFlags,
 } from "discord.js";
 import { renderCode, themes } from "./code_renderer.js";
-import loggerBuilder from "pino";
-
-const logger = loggerBuilder();
+import { logger } from "./logging.js";
 
 const TIMEOUT = 60000;
 
