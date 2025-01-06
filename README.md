@@ -16,11 +16,11 @@
 - [x] Get rid of clipboard icon
 - [ ] Maybe change deleting the original message to making it non-ephemeral
 - [ ] Improve UX on interaction timeout
-- [ ] Setup bot hosting
+- [x] Setup bot hosting
     - [x] Dockerfile
     - [x] Github actions
     - [x] Deployment
-    - [ ] Secrets
+    - [x] Secrets
     - [x] Argo project
 
 ### Docs
